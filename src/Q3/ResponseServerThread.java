@@ -41,6 +41,7 @@ public class ResponseServerThread implements Runnable{
             in.close();
             clientSocket.close();
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }

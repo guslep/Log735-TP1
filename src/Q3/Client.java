@@ -1,30 +1,73 @@
 package Q3;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.nio.channels.InterruptedByTimeoutException;
+import java.util.Date;
 
 public class Client {
-	public static void main(String[] args) throws IOException {
+	private static Integer currentServerId=-1;
 
-		String serverHostname = new String ("127.0.0.1");
+    public static void main(String[] args) throws IOException {
 
-        if (args.length > 0)
-        	serverHostname = args[0];
-        System.out.println ("Essai de se connecter a l'hote " +
-		serverHostname + " au port 10118.");
-
-        Socket echoSocket = null;
         PrintWriter out = null;
         BufferedReader in = null;
+        String userInput;
+        System.out.print ("Entree: ");
+        Socket connectionSocket=createNewConnection();
+        out = new PrintWriter(connectionSocket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+
+
+
+        while ((userInput = stdIn.readLine()) != null) {
+            Date sent=new Date();
+            out.println(userInput);
+            try{System.out.println("recu: " + in.readLine());}
+            catch (SocketTimeoutException e){
+              connectionSocket=createNewConnection();
+                out = new PrintWriter(connectionSocket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+
+            }
+
+            System.out.print ("Entree: ");
+        }
+
+        out.close();
+        in.close();
+        stdIn.close();
+        connectionSocket.close();
+
+
+
+
+
+
+
+    }
+
+    private static Socket createNewConnection(){
+        String location=clientConfig.getNewServer(currentServerId);
+
+        String serverHostname =location.split(":")[0] ;
+        Integer portNumber=Integer.parseInt(location.split(":")[1]);
+        System.out.println ("Essai de se connecter a l'hote " +
+                serverHostname + " au port"+location.split(":")[1]);
+        currentServerId++;
+        if(currentServerId>=clientConfig.getMaxServerId()){
+            currentServerId=0;
+        }
+        Socket echoSocket = null;
+
 
         try {
             echoSocket = new Socket(serverHostname, 10118);
-            out = new PrintWriter(echoSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+            echoSocket.setSoTimeout(10000);
+
         } catch (UnknownHostException e) {
             System.err.println("Hote inconnu: " + serverHostname);
             System.exit(1);
@@ -33,19 +76,10 @@ public class Client {
             System.exit(1);
         }
 
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-        String userInput;
-        System.out.print ("Entree: ");
-        while ((userInput = stdIn.readLine()) != null) {
-        	out.println(userInput);
-        	System.out.println("recu: " + in.readLine());
-            System.out.print ("Entree: ");
-        }
 
-        out.close();
-        in.close();
-        stdIn.close();
-        echoSocket.close();
+
+        return echoSocket;
     }
+
 }
 
