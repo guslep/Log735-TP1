@@ -1,4 +1,4 @@
-package Q3;
+package Q6;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,14 +30,18 @@ public class ResponseServerThread implements Runnable{
             while ((inputLine = in.readLine()) != null)
             {
                 System.out.println ("Serveur: " + inputLine);
+                if(inputLine.split("---")[0].equals("update")){
+                    Server.setOrderCount(Integer.parseInt(inputLine.split("---")[1]));
+                }
                 if (inputLine.equals("Bye"))
                     break;
                 inputLine = inputLine.toUpperCase();
                 try {
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                out.println("To "+ clientId+": " +inputLine);
+                out.println("#"+ Server.newOrder()+" - " +inputLine);
 
             }
 
@@ -53,8 +57,8 @@ public class ResponseServerThread implements Runnable{
 
     }
     //receive the socket created and the client id
-    public ResponseServerThread(Socket socket,String clientId){
-        this.clientId=clientId;
+    public ResponseServerThread(Socket socket){
+
         clientSocket=socket;
 
     }
