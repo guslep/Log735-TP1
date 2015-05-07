@@ -6,7 +6,7 @@ import java.io.*;
 public class Server { 
 	public static void main(String[] args) throws IOException { 
     
-		ServerSocket serverSocket = null; 
+		ServerSocket serverSocket = null;
 
 		try { 
 			serverSocket = new ServerSocket(10118); 
@@ -15,19 +15,19 @@ public class Server {
         { 
 			System.err.println("On ne peut pas ecouter au  port: 10118.");
 			System.exit(1); 
-        } 
+        }
 
-		Socket clientSocket = null; 
+		Socket clientSocket = null;
 		System.out.println ("Le serveur est en marche, Attente de la connexion.....");
 
-		try { 
-			clientSocket = serverSocket.accept(); 
-        } 
-		catch (IOException e) 
-        { 
+		try {
+			clientSocket = serverSocket.accept();
+        }
+		catch (IOException e)
+        {
 			System.err.println("Accept a echoue.");
-			System.exit(1); 
-        } 
+			System.exit(1);
+        }
 
 		System.out.println ("connexion reussie");
 		System.out.println ("Attente de l'entree.....");
