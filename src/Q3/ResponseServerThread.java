@@ -34,6 +34,7 @@ public class ResponseServerThread implements Runnable{
                     break;
                 inputLine = inputLine.toUpperCase();
                 try {
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

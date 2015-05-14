@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 
 public class Client {
 	private static Integer currentServerId=-1;
-
+    private static String serverCounter="";
     public static void main(String[] args) throws IOException {
 
         PrintWriter out = null;
@@ -32,7 +32,11 @@ public class Client {
             while (!messageSent) {
                 out.println(userInput);
                 try {
-                    System.out.println("recu: " + in.readLine());
+
+                    String response=in.readLine();
+
+                    System.out.println("recu: " + response);
+
                     messageSent=true;
                 } catch (SocketTimeoutException e) {
                     System.out.println("Temps d'attendte depasse reconnexion sur un autre serveur " );
@@ -95,6 +99,8 @@ public class Client {
 
             System.out.println ("Connecte a " +
                     serverHostname + " au port "+location.split(":")[1]);
+
+
 
         } catch (UnknownHostException e) {
 
