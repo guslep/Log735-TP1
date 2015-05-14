@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 
 /**
  * Created by Gus on 5/7/2015.
@@ -16,7 +13,7 @@ public class SynchronizerServerThread implements Runnable{
 
 
     private Socket clientSocket;
-    private static boolean backupConnectionSuccesfull=false;
+    private static boolean backupConnectionDown =true;
     private String  clientId;
     private PrintWriter out = null;
     private boolean slave=true;
@@ -78,14 +75,19 @@ public class SynchronizerServerThread implements Runnable{
     }
 
     public void newOrder(int counterNumber){
-    if(slave){
-        setMaster();
-        System.out.print("server est master");
-    }
-        if(!backupConnectionSuccesfull){
+        if(backupConnectionDown&&!slave){
             createSocket();
         }
-        out.println("Counter:"+counterNumber);
+        if(slave){
+        setMaster();
+        System.out.println("server est master");
+    }
+
+
+        if(!backupConnectionDown){
+            out.println("Counter:"+counterNumber);
+
+        }
 
 
     }
@@ -97,11 +99,15 @@ public class SynchronizerServerThread implements Runnable{
 private void createSocket(){
 
     Socket connectionSocket=createNewConnection();
+    if(connectionSocket!=null){
 
     try {
         out = new PrintWriter(connectionSocket.getOutputStream(), true);
     } catch (IOException e) {
         e.printStackTrace();
+    }
+    }else{
+        System.out.println("Could not connect to backup");
     }
 }
 
@@ -120,9 +126,10 @@ private void createSocket(){
 
 
         try {
-            echoSocket = new Socket(serverHostname, 10119);
-            echoSocket.setSoTimeout(10000);
-            backupConnectionSuccesfull=true;
+            echoSocket = new Socket();
+            echoSocket.connect(new InetSocketAddress(serverHostname, 10119),1000);
+            //echoSocket.setSoTimeout(1000);
+            backupConnectionDown =false;
             System.out.println ("Connecte a " +
                     serverHostname + " au port "+location.split(":")[1]);
 
@@ -133,7 +140,7 @@ private void createSocket(){
             System.exit(1);
         } catch (IOException e) {
             System.err.println("Error: The application is not currently availaible. Please contact the support line");
-                backupConnectionSuccesfull=false;
+                backupConnectionDown =true;
             echoSocket=null;
 
 
