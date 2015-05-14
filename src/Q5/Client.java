@@ -1,3 +1,21 @@
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #1
+ Étudiants : [Guillaume Lépine #1]
+ [Pier-Luc Menard #2]
+ Code(s) perm. : [ ak35490 #1]
+ [pl #2]
+ Date création : [14 mai 2015]
+ Date dern. modif. : [15 mai 2015]
+ ******************************************************
+ [Représente un client, il essaie de ce connecter à tour de rôle aux serveurs spécifiés dans la classe clientConfig pour trouver les adresses des serveurs
+ L'utulisateur écrit une ligne dans la console puis lorsuqe la touche enter est enfoncé le lcient envoie la ligne au serveur puis attend une réponse qui sera affiché dans la console]
+ ******************************************************/
+
+
+
 package Q5;
 
 import java.io.BufferedReader;
@@ -72,6 +90,11 @@ public class Client {
 
     }
 
+    /**
+     * Génère un nouveau socket puis ce connecte à un serveur sur le port 11018. Si le premier serveur sépcifié dans la classe
+     * clientCOnfig ne répond pas la méthode essaie le prochain jusqu'à ce qu'ils aient tous été essseyé ou qu'une connexion soit établie
+     * @return socket connecté à un serveur
+     */
     private static Socket createNewConnection(){
         String location= clientConfig.getNewServer(currentServerId);
 

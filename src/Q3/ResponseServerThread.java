@@ -1,3 +1,20 @@
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #1
+ Étudiants : [Guillaume Lépine #1]
+ [Pier-Luc Menard #2]
+ Code(s) perm. : [ ak35490 #1]
+ [pl #2]
+ Date création : [14 mai 2015]
+ Date dern. modif. : [15 mai 2015]
+ ******************************************************
+ [Thread dédié à une connexion, recoit les données du client, incérmente le conmpteur du  serveur puis renvoies la réponse
+
+ ]
+ ******************************************************/
+
 package Q3;
 
 import java.io.BufferedReader;
@@ -6,9 +23,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-/**
- * Created by Gus on 5/7/2015.
- */
+
 public class ResponseServerThread implements Runnable{
 
     private Socket clientSocket;
@@ -53,7 +68,12 @@ public class ResponseServerThread implements Runnable{
 
 
     }
-    //receive the socket created and the client id
+
+    /**
+     *
+     * @param socket scket de la connection avec le client
+     * @param clientId id du client
+     */
     public ResponseServerThread(Socket socket,String clientId){
         this.clientId=clientId;
         clientSocket=socket;

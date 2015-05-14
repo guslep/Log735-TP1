@@ -1,3 +1,19 @@
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #1
+ Étudiants : [Guillaume Lépine #1]
+ [Pier-Luc Menard #2]
+ Code(s) perm. : [ ak35490 #1]
+ [pl #2]
+ Date création : [14 mai 2015]
+ Date dern. modif. : [15 mai 2015]
+ ******************************************************
+ [Cette classe sert de classe principale pour le serveur. Lorsqu'un client veut ce connecter au serveur le serveur créé un nouveau thread pour la connection.
+ cette classe est aussi responsable de garder à jour le compteur des transactions]
+ ******************************************************/
+
 package Q3;
 
 import java.io.IOException;
