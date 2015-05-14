@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
@@ -28,6 +29,7 @@ public class SynchronizerServerThread implements Runnable{
         try {
            serverSocket = new ServerSocket(10119);
             clientSocket = serverSocket.accept();
+            System.out.println("listening on 10119");
 
 
         } catch (IOException e) {
@@ -55,7 +57,10 @@ public class SynchronizerServerThread implements Runnable{
             clientSocket.close();
 
 
-        } catch (IOException e) {
+        } catch (SocketException e) {
+           setMaster();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -65,11 +70,11 @@ public class SynchronizerServerThread implements Runnable{
 
         try {
 
-            syncSocket=new ServerSocket(1337);
+            syncSocket=new ServerSocket(10119);
         }
         catch (IOException e)
         {
-            System.err.println("On ne peut pas ecouter au  port: 1337.");
+            System.err.println("On ne peut pas ecouter au  port: 10119");
             System.exit(1);
         }
         System.out.println ("Le serveur est en mode slave....");
