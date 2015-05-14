@@ -14,17 +14,20 @@ import java.net.UnknownHostException;
  */
 public class SynchronizerServerThread implements Runnable{
 
+
     private Socket clientSocket;
+    private static boolean backupConnectionSuccesfull=false;
     private String  clientId;
     private PrintWriter out = null;
     private boolean slave=true;
 
         // the thread will wait for client input and send it back in uppercase
-        ServerSocket syncSocket = null;
+
     ServerSocket serverSocket=null;
     @Override
     public void run() {
         System.out.println("Sync tread partie");
+
 
         try {
            serverSocket = new ServerSocket(10119);
@@ -68,15 +71,7 @@ public class SynchronizerServerThread implements Runnable{
     public SynchronizerServerThread(){
 
 
-        try {
 
-            syncSocket=new ServerSocket(10119);
-        }
-        catch (IOException e)
-        {
-            System.err.println("On ne peut pas ecouter au  port: 10119");
-            System.exit(1);
-        }
         System.out.println ("Le serveur est en mode slave....");
 
 
@@ -87,6 +82,9 @@ public class SynchronizerServerThread implements Runnable{
         setMaster();
         System.out.print("server est master");
     }
+        if(!backupConnectionSuccesfull){
+            createSocket();
+        }
         out.println("Counter:"+counterNumber);
 
 
@@ -124,7 +122,7 @@ private void createSocket(){
         try {
             echoSocket = new Socket(serverHostname, 10119);
             echoSocket.setSoTimeout(10000);
-
+            backupConnectionSuccesfull=true;
             System.out.println ("Connecte a " +
                     serverHostname + " au port "+location.split(":")[1]);
 
@@ -135,8 +133,10 @@ private void createSocket(){
             System.exit(1);
         } catch (IOException e) {
             System.err.println("Error: The application is not currently availaible. Please contact the support line");
+                backupConnectionSuccesfull=false;
             echoSocket=null;
-            echoSocket=createNewConnection();
+
+
 
 
 
