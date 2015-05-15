@@ -1,10 +1,25 @@
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #1
+ Étudiants : [Guillaume Lépine #1]
+ [Pier-Luc Menard #2]
+ Code(s) perm. : [ ak35490 #1]
+ [pl #2]
+ Date création : [14 mai 2015]
+ Date dern. modif. : [15 mai 2015]
+ ******************************************************
+ []
+ ******************************************************/
+
+
+
 package Q6;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Server {
 	static int orderCounter=0;
@@ -69,6 +84,8 @@ public class Server {
 	public static synchronized int newOrder(){
 		orderCounter++;
 		syncThread.newOrder(orderCounter);
+
+
 
 		return orderCounter;
 	}
